@@ -95,7 +95,7 @@ int main()
             exit(EXIT_FAILURE);
         }
     }
-//создаем дочерние пр
+    // создаем дочерние пр
     for (int index = 0; index < number_processes; ++index)
     {
         pid_t process_id = create_process();
@@ -139,12 +139,12 @@ int main()
     sem_post(semaphores[1][0]);
 
     wait(NULL);
-//освобождаем
+    // освобождаем
     for (int i = 0; i < number_processes; ++i)
     {
         munmap(mmapped_file_pointers[i], MAX_LENGTH);
         shm_unlink(mmapped_file_names[i]);
-
+        close(mmapped_file_descriptors[i]);
         sem_close(semaphores[i][0]);
         sem_close(semaphores[i][1]);
         sem_unlink(semaphores_names[i]);
