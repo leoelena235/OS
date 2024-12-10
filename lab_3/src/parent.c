@@ -8,7 +8,7 @@
 #include <semaphore.h>
 
 const int MAX_LENGTH = 255;
-
+// доч процесс
 int create_process()
 {
     pid_t pid = fork();
@@ -33,7 +33,7 @@ int main()
     semaphoresForParent_names[0] = "/semaphoresForParentOne";
     semaphoresForParent_names[1] = "/semaphoresForParentTwo";
 
-    // Считываем имена для файлов
+    // Считываем имена для дочерних процессов
     char file_names[number_processes][MAX_LENGTH];
     for (int i = 0; i < number_processes; ++i)
     {
@@ -46,12 +46,12 @@ int main()
 
         int str_len = strlen(file_names[i]);
         if (file_names[i][str_len - 1] == 10)
-        { // перенос строки
+        { // убираем перенос строки
             file_names[i][str_len - 1] = 0;
         }
     }
 
-    // Получаем дескрипторы memory-mapped-файлов размером MAX_LENGTH и выделяем их в память
+    // Создаем memory-mapped файлы и получаем их дескрипторы
     int mmapped_file_descriptors[number_processes];
     char *mmapped_file_pointers[number_processes];
     for (int i = 0; i < number_processes; ++i)
@@ -77,7 +77,7 @@ int main()
         }
     }
 
-    // Создаем семафоры
+    // создаем семафоры
     sem_t *semaphores[number_processes][2];
     for (int i = 0; i < number_processes; ++i)
     {
@@ -95,7 +95,7 @@ int main()
             exit(EXIT_FAILURE);
         }
     }
-
+//создаем дочерние пр
     for (int index = 0; index < number_processes; ++index)
     {
         pid_t process_id = create_process();
@@ -139,7 +139,7 @@ int main()
     sem_post(semaphores[1][0]);
 
     wait(NULL);
-
+//освобождаем
     for (int i = 0; i < number_processes; ++i)
     {
         munmap(mmapped_file_pointers[i], MAX_LENGTH);
